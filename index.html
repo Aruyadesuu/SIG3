@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet preview - Peta Kuliner Bogor</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin=""></script>
+    <style type="text/css">
+        body { margin: 0; padding: 0; font-family: sans-serif; } 
+        html, body, #map { width: 100%; height: 100%; }
+        /* Styling simpel untuk popup */
+        .info-popup { font-size: 13px; line-height: 1.5; }
+        .info-popup b { font-size: 15px; display: block; border-bottom: 1px solid #ddd; margin-bottom: 5px; padding-bottom: 3px; color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Setup dasar map sama seperti kode aslimu
+        var map = L.map('map', {attributionControl: false}).setView([-6.54536, 106.814], 12);
+        L.control.attribution({prefix: false}).addTo(map);
+        
+        // Layer hasil ekspor QGIS kamu
+        var tilesource_layer = L.tileLayer('./TUGASP3/{z}/{x}/{y}.jpg', {minZoom: 11, maxZoom: 14, tms: false, attribution: 'Created by QGIS'}).addTo(map);
+
+        // Data 20 titik lokasi kuliner Bogor
+        var dataKuliner = [
+            {nama: "Lemongrass Bogor", lat: -6.575027581177699, lng: 106.80802778881267},
+            {nama: "Macaroni Panggang", lat: -6.586616, lng: 106.800045},
+            {nama: "Kedai Kita", lat: -6.587372, lng: 106.799757},
+            {nama: "Kopi Nako Kebon Jati", lat: -6.657519, lng: 106.882194},
+            {nama: "Bumi Aki Bogor", lat: -6.577239, lng: 106.806680},
+            {nama: "Two Stories Cafe", lat: -6.602534, lng: 106.812658},
+            {nama: "Cimory Riverside", lat: -6.637380, lng: 106.901594},
+            {nama: "De' Leuit", lat: -6.599186, lng: 106.805527},
+            {nama: "Kluwih Sunda Authentic", lat: -6.603395, lng: 106.811801},
+            {nama: "Pia Apple Pie", lat: -6.587843, lng: 106.802117},
+            {nama: "Ngopi Di Sawah", lat: -6.685324, lng: 106.884177},
+            {nama: "The Lake House", lat: -6.688172, lng: 106.945892},
+            {nama: "Popolo Coffee", lat: -6.600989, lng: 106.811756},
+            {nama: "Soto Kuning Pak Yusup", lat: -6.605335, lng: 106.797937},
+            {nama: "Tier Siera Resto & Lounge", lat: -6.593717, lng: 106.806553},
+            {nama: "Grand Garden Resto & Cafe", lat: -6.598642, lng: 106.799834},
+            {nama: "Warung Nako Pajajaran", lat: -6.604928, lng: 106.812165},
+            {nama: "Medja Restaurant", lat: -6.605273, lng: 106.813352},
+            {nama: "Kopi Daong", lat: -6.702773, lng: 106.866023},
+            {nama: "Bavarian Culinary Haus", lat: -6.653457, lng: 106.901529}
+        ];
+
+        // Looping untuk menampilkan marker di atas peta
+        dataKuliner.forEach(function(lokasi) {
+            var marker = L.marker([lokasi.lat, lokasi.lng]).addTo(map);
+            
+            // Konten untuk klik (Popup)
+            var detailInfo = "<div class='info-popup'>" +
+                             "<b>" + lokasi.nama + "</b>" +
+                             "Lat: " + lokasi.lat + "<br>" +
+                             "Long: " + lokasi.lng + 
+                             "</div>";
+            
+            // Menambahkan interaksi
+            marker.bindTooltip(lokasi.nama); // Muncul nama saat di-hover
+            marker.bindPopup(detailInfo);    // Muncul detail saat diklik
+        });
+    </script>
+</body>
+</html>
